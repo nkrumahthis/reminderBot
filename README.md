@@ -17,7 +17,7 @@ ReminderBot is a command-line tool written in Go that allows users to set remind
 
 ## Installation
 
-1. Install Go on your system (if not already installed): https://golang.org/doc/install
+1. Install Go on your system (if not already installed): <https://golang.org/doc/install>
 2. Clone the ReminderBot repository to your local machine.
 3. Build the ReminderBot binary by running go build in the repository directory.
 4. Run the ReminderBot binary to start the command-line interface.
