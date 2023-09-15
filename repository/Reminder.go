@@ -15,7 +15,12 @@ type Reminder struct {
 }
 
 func (r *Reminder) String() string {
-	return fmt.Sprintf(r.DueTime, ":", r.Description, r.Tags)
+	due, err := time.Parse(time.RFC3339, r.DueTime)
+	if err != nil {
+		panic(err)
+	}
+
+	return due.Format(time.Kitchen) + " |-> " + r.Description + r.Tags
 }
 
 func validate(description string, dueTime string, tags string) error {
@@ -39,8 +44,12 @@ func CreateReminder(reminder *Reminder) (*Reminder, error) {
 		panic(err)
 	}
 
-	fmt.Println(reminder.DueTime)
-	_, err = db.DB.Exec("INSERT INTO reminders (description, due, tags) VALUES ($1, $2, $3)", reminder.Description, reminder.DueTime, reminder.Tags)
+	_, err = db.DB.Exec(
+		"INSERT INTO reminders (description, due, tags) VALUES ($1, $2, $3)",
+		reminder.Description,
+		reminder.DueTime,
+		reminder.Tags,
+	)
 
 	return reminder, err
 }
