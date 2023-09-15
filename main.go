@@ -6,15 +6,11 @@ import (
 
 	"github.com/nkrumahthis/reminderBot/commands"
 	"github.com/nkrumahthis/reminderBot/db"
-	"github.com/nkrumahthis/reminderBot/repository"
 )
 
 
 func main(){
 	db.Init()
-
-	// Define "create" and "list" subcommands
-	listCmd := flag.NewFlagSet("list", flag.ExitOnError)
 
 	// Parse command-line arguments
 	flag.Parse()
@@ -23,9 +19,7 @@ func main(){
 	if flag.NArg() > 0 && flag.Arg(0) == "create" {
 		commands.ParseCreateCmd()
 	} else if flag.NArg() > 0 && flag.Arg(0) == "list" {
-		listCmd.Parse(flag.Args()[1:])
-		reminders := repository.ListReminders()
-		fmt.Println(reminders)
+		commands.ParseListCmd()
 	} else if flag.NArg() > 0 && flag.Arg(0) == "delete" {
 		fmt.Println("reminderBot", flag.Args()[0], "is not implemented yet")
 		return
