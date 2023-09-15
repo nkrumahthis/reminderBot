@@ -4,15 +4,15 @@ import (
 	"flag"
 	"fmt"
 
-	_ "github.com/mattn/go-sqlite3"
-	commands "github.com/nkrumahthis/reminderBot/commands"
+	"github.com/nkrumahthis/reminderBot/commands"
 	"github.com/nkrumahthis/reminderBot/db"
+	"github.com/nkrumahthis/reminderBot/repository"
 )
 
 
 func main(){
 	db.Init()
-	
+
 	// Define "create" and "list" subcommands
 	listCmd := flag.NewFlagSet("list", flag.ExitOnError)
 
@@ -24,8 +24,7 @@ func main(){
 		commands.ParseCreateCmd()
 	} else if flag.NArg() > 0 && flag.Arg(0) == "list" {
 		listCmd.Parse(flag.Args()[1:])
-		reminders := List()
-
+		reminders := repository.ListReminders()
 		fmt.Println(reminders)
 	} else if flag.NArg() > 0 && flag.Arg(0) == "delete" {
 		fmt.Println("reminderBot", flag.Args()[0], "is not implemented yet")
