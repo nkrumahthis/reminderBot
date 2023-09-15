@@ -6,10 +6,13 @@ import (
 
 	_ "github.com/mattn/go-sqlite3"
 	commands "github.com/nkrumahthis/reminderBot/commands"
+	"github.com/nkrumahthis/reminderBot/db"
 )
 
 
 func main(){
+	db.Init()
+	
 	// Define "create" and "list" subcommands
 	listCmd := flag.NewFlagSet("list", flag.ExitOnError)
 
