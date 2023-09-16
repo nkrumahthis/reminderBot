@@ -3,12 +3,14 @@ package repository
 import (
 	"fmt"
 	"time"
+	"strconv"
 
 	"github.com/nkrumahthis/reminderBot/db"
 )
 
 // Reminder represents a reminder with a task description, due date/time, and tags.
 type Reminder struct {
+	Id          int64
 	Description string
 	DueTime     string
 	Tags        string
@@ -20,7 +22,10 @@ func (r *Reminder) String() string {
 		panic(err)
 	}
 
-	return due.Format(time.Kitchen) + " |-> " + r.Description + r.Tags
+	// Convert int64 to string
+	id := strconv.FormatInt(r.Id, 10)
+
+	return "[" + id + "] " + due.Format(time.Kitchen) + " |-> " + r.Description + r.Tags
 }
 
 func validate(description string, dueTime string, tags string) error {
@@ -44,12 +49,15 @@ func CreateReminder(reminder *Reminder) (*Reminder, error) {
 		panic(err)
 	}
 
-	_, err = db.DB.Exec(
+	result, err := db.DB.Exec(
 		"INSERT INTO reminders (description, due, tags) VALUES ($1, $2, $3)",
 		reminder.Description,
 		reminder.DueTime,
 		reminder.Tags,
 	)
+
+	lastInsertID, err := result.LastInsertId()
+	reminder.Id = lastInsertID
 
 	return reminder, err
 }
@@ -62,13 +70,13 @@ func ListReminders() []Reminder {
 	}
 
 	for rows.Next() {
-		var id int
+		var id int64
 		var description string
 		var due string
 		var tags string
 
 		err = rows.Scan(&id, &description, &due, &tags)
-		reminders = append(reminders, Reminder{description, due, tags})
+		reminders = append(reminders, Reminder{id, description, due, tags})
 		if err != nil {
 			panic(err)
 		}

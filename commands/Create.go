@@ -51,6 +51,7 @@ func ParseCreateCmd() {
 
 		// print print reminder
 		fmt.Println("Reminder created successfully:")
+		fmt.Println("Id:", reminder.Id)
 		fmt.Println("Description:", reminder.Description)
 		fmt.Println("Due date/time:", reminder.DueTime)
 		fmt.Println("Tags:", reminder.Tags)
