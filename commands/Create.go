@@ -40,7 +40,6 @@ func ParseCreateCmd() {
 
 	flag.Parse()
 
-	fmt.Println("flag.Narg", flag.NArg())
 	if flag.NArg() > 0 && flag.Arg(0) == "create" {
 		createCmd.Parse(flag.Args()[1:])
 		reminder, err := Create(*description, *dueTime, *tags)
