@@ -18,10 +18,12 @@ func main(){
 	// Check which subcommand is provided
 	if flag.NArg() > 0 && flag.Arg(0) == "create" {
 		commands.ParseCreateCmd()
+		return
 	} else if flag.NArg() > 0 && flag.Arg(0) == "list" {
 		commands.ParseListCmd()
+		return
 	} else if flag.NArg() > 0 && flag.Arg(0) == "delete" {
-		fmt.Println("reminderBot", flag.Args()[0], "is not implemented yet")
+		commands.ParseDeleteCmd()
 		return
 	} else if flag.NArg() > 0 && flag.Arg(0) == "edit" {
 		fmt.Println("reminderBot", flag.Args()[0], "is not implemented yet")
