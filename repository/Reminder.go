@@ -83,3 +83,16 @@ func ListReminders() []Reminder {
 	}
 	return reminders
 }
+
+func DeleteReminder(id int64) error {
+	_, err := db.DB.Exec(
+		"DELETE FROM reminders WHERE id = $1",
+		id,
+	)
+
+	if err != nil {
+		panic(err)
+	}
+
+	return err
+}
