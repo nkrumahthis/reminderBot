@@ -2,8 +2,8 @@ package repository
 
 import (
 	"fmt"
-	"time"
 	"strconv"
+	"time"
 
 	"github.com/nkrumahthis/reminderBot/db"
 )
@@ -84,6 +84,21 @@ func ListReminders() []Reminder {
 	return reminders
 }
 
+func GetReminder(id int64) (*Reminder, error) {
+	row, err := db.DB.Query("SELECT * FROM reminder WHERE id = ?", id)
+	if err != nil {
+		return nil, err
+	}
+
+	var reminder Reminder
+	err = row.Scan(&reminder.Id, &reminder.Description, &reminder.DueTime, &reminder.Tags)
+	if err != nil {
+		return nil, err
+	}
+
+	return &reminder, nil
+}
+
 func DeleteReminder(id int64) error {
 	_, err := db.DB.Exec(
 		"DELETE FROM reminders WHERE id = $1",
@@ -95,4 +110,8 @@ func DeleteReminder(id int64) error {
 	}
 
 	return err
+}
+
+func EditReminder(reminder *Reminder) (*Reminder, error) {
+
 }
