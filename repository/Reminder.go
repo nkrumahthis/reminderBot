@@ -99,6 +99,27 @@ func GetReminder(id int64) (*Reminder, error) {
 	return &reminder, nil
 }
 
+func EditReminder(reminder *Reminder) (*Reminder, error) {
+	err := validate(reminder.Description, reminder.DueTime, reminder.Tags)
+	if err != nil {
+		return nil, err
+	}
+
+	_, err = db.DB.Exec(
+		"UPDATE reminders SET description = $1, due = $2, tags = $3 WHERE id = $4",
+		reminder.Description,
+		reminder.DueTime,
+		reminder.Tags,
+		reminder.Id,
+	)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return reminder, nil
+}
+
 func DeleteReminder(id int64) error {
 	_, err := db.DB.Exec(
 		"DELETE FROM reminders WHERE id = $1",
@@ -110,8 +131,4 @@ func DeleteReminder(id int64) error {
 	}
 
 	return err
-}
-
-func EditReminder(reminder *Reminder) (*Reminder, error) {
-
 }
