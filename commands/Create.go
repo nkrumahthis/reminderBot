@@ -33,7 +33,7 @@ func Create (description, dueTime, tags string) (*repository.Reminder, error) {
 func ParseCreateCmd() {
 	createCmd := flag.NewFlagSet("create", flag.ExitOnError)
 
-	// define create subcommand flagsß
+	// define create subcommand flags
 	description := createCmd.String("description", "", "Task description")
 	dueTime := createCmd.String("due", "", "Due date/time (YYYY-MM-DD HH:MM)")
 	tags := createCmd.String("tags", "", "Tags separated by commas")
@@ -54,7 +54,6 @@ func ParseCreateCmd() {
 		fmt.Println("Description:", reminder.Description)
 		fmt.Println("Due date/time:", reminder.DueTime)
 		fmt.Println("Tags:", reminder.Tags)
-
 
 	}
 }

@@ -26,7 +26,8 @@ func main(){
 		commands.ParseDeleteCmd()
 		return
 	} else if flag.NArg() > 0 && flag.Arg(0) == "edit" {
-		commands.ParseEditCmd()
+		// commands.ParseEditCmd()
+		fmt.Println("reminderBot Edit is not implemented yet")
 		return
 	} else if flag.NArg() > 0 && flag.Arg(0) == "snooze" {
 		fmt.Println("reminderBot", flag.Args()[0], "is not implemented yet")
