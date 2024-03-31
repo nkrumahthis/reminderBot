@@ -9,6 +9,8 @@ import (
 	"github.com/charmbracelet/bubbles/list"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
+	"github.com/nkrumahthis/reminderBot/db"
+	"github.com/nkrumahthis/reminderBot/repository"
 )
 
 const listHeight = 14
@@ -96,17 +98,13 @@ func (m model) View() string {
 }
 
 func main() {
-	items := []list.Item{
-		item("Ramen"),
-		item("Tomato Soup"),
-		item("Hamburgers"),
-		item("Cheeseburgers"),
-		item("Currywurst"),
-		item("Okonomiyaki"),
-		item("Pasta"),
-		item("Fillet Mignon"),
-		item("Caviar"),
-		item("Just Wine"),
+	db.Init()
+
+	items := []list.Item{}
+
+	reminders := repository.ListReminders()
+	for _, reminder := range *reminders {
+		items = append(items, item(reminder.Description))
 	}
 
 	const defaultWidth = 20

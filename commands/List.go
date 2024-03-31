@@ -13,7 +13,7 @@ func ParseListCmd() {
 	listCmd.Parse(flag.Args()[1:])
 	reminders := repository.ListReminders()
 
-	for _, reminder := range reminders {
+	for _, reminder := range *reminders {
 		fmt.Println(reminder.String())
 	}
 }

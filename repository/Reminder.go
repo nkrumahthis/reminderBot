@@ -62,8 +62,9 @@ func CreateReminder(reminder *Reminder) (*Reminder, error) {
 	return reminder, err
 }
 
-func ListReminders() []Reminder {
+func ListReminders() *[]Reminder {
 	reminders := []Reminder{}
+
 	rows, err := db.DB.Query("SELECT * FROM reminders;")
 	if err != nil {
 		panic(err)
@@ -81,7 +82,7 @@ func ListReminders() []Reminder {
 			panic(err)
 		}
 	}
-	return reminders
+	return &reminders
 }
 
 func GetReminder(id int64) (*Reminder, error) {
