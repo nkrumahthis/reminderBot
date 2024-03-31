@@ -17,31 +17,30 @@ const listHeight = 14
 
 var (
 	titleStyle        = lipgloss.NewStyle().MarginLeft(2)
-	itemStyle         = lipgloss.NewStyle().PaddingLeft(4)
+	reminderStyle         = lipgloss.NewStyle().PaddingLeft(4)
 	selectedItemStyle = lipgloss.NewStyle().PaddingLeft(2).Foreground(lipgloss.Color("170"))
 	paginationStyle   = list.DefaultStyles().PaginationStyle.PaddingLeft(4)
 	helpStyle         = list.DefaultStyles().HelpStyle.PaddingLeft(4).PaddingBottom(1)
 	quitTextStyle     = lipgloss.NewStyle().Margin(1, 0, 2, 4)
 )
 
-type item string
+type reminderDelegate struct{}
 
-func (i item) FilterValue() string { return "" }
+func (d reminderDelegate) Height() int { return 1 }
 
-type itemDelegate struct{}
+func (d reminderDelegate) Spacing() int { return 0 }
 
-func (d itemDelegate) Height() int                             { return 1 }
-func (d itemDelegate) Spacing() int                            { return 0 }
-func (d itemDelegate) Update(_ tea.Msg, _ *list.Model) tea.Cmd { return nil }
-func (d itemDelegate) Render(w io.Writer, m list.Model, index int, listItem list.Item) {
-	i, ok := listItem.(item)
+func (d reminderDelegate) Update(_ tea.Msg, _ *list.Model) tea.Cmd { return nil }
+
+func (d reminderDelegate) Render(w io.Writer, m list.Model, index int, listItem list.Item) {
+	i, ok := listItem.(repository.Reminder)
 	if !ok {
 		return
 	}
 
-	str := fmt.Sprintf("%d. %s", index+1, i)
+	str := fmt.Sprintf("%d. %s", index+1, i.String())
 
-	fn := itemStyle.Render
+	fn := reminderStyle.Render
 	if index == m.Index() {
 		fn = func(s ...string) string {
 			return selectedItemStyle.Render("> " + strings.Join(s, " "))
@@ -53,7 +52,7 @@ func (d itemDelegate) Render(w io.Writer, m list.Model, index int, listItem list
 
 type model struct {
 	list     list.Model
-	choice   string
+	choice   *repository.Reminder
 	quitting bool
 }
 
@@ -74,9 +73,9 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			return m, tea.Quit
 
 		case "enter":
-			i, ok := m.list.SelectedItem().(item)
+			i, ok := m.list.SelectedItem().(repository.Reminder)
 			if ok {
-				m.choice = string(i)
+				m.choice = &i
 			}
 			return m, tea.Quit
 		}
@@ -88,11 +87,11 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 }
 
 func (m model) View() string {
-	if m.choice != "" {
+	if m.choice != nil {
 		return quitTextStyle.Render(fmt.Sprintf("%s? Sounds good to me.", m.choice))
 	}
 	if m.quitting {
-		return quitTextStyle.Render("Not hungry? That’s cool.")
+		return quitTextStyle.Render("Goodbye")
 	}
 	return "\n" + m.list.View()
 }
@@ -104,13 +103,13 @@ func main() {
 
 	reminders := repository.ListReminders()
 	for _, reminder := range *reminders {
-		items = append(items, item(reminder.Description))
+		items = append(items, reminder)
 	}
 
 	const defaultWidth = 20
 
-	l := list.New(items, itemDelegate{}, defaultWidth, listHeight)
-	l.Title = "What do you want for dinner?"
+	l := list.New(items, reminderDelegate{}, defaultWidth, listHeight)
+	l.Title = "Which reminder do you want to do?"
 	l.SetShowStatusBar(false)
 	l.SetFilteringEnabled(false)
 	l.Styles.Title = titleStyle

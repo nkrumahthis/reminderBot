@@ -28,6 +28,10 @@ func (r *Reminder) String() string {
 	return "[" + id + "] " + due.Format(time.Kitchen) + " |-> " + r.Description + r.Tags
 }
 
+func (r Reminder) FilterValue() string {
+	return ""
+}
+
 func validate(description string, dueTime string, tags string) error {
 	if description == "" {
 		return fmt.Errorf("error: --description is required")
