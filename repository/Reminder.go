@@ -29,7 +29,7 @@ func (r *Reminder) String() string {
 }
 
 func (r Reminder) FilterValue() string {
-	return ""
+	return r.Description
 }
 
 func validate(description string, dueTime string, tags string) error {
