@@ -5,7 +5,7 @@ import (
 	"os"
 
 	tea "github.com/charmbracelet/bubbletea"
-	"github.com/nkrumahthis/reminderBot/cli"
+	cli "github.com/nkrumahthis/reminderBot/cli/viewmodels"
 	"github.com/nkrumahthis/reminderBot/db"
 )
 
