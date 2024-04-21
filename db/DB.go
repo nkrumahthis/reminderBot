@@ -10,13 +10,13 @@ import (
 var DB *sql.DB
 
 func createTables(){
-	create_reminders_table := `CREATE TABLE IF NOT EXISTS reminders (
+	createRemindersTableSQL := `CREATE TABLE IF NOT EXISTS reminders (
 		id INTEGER PRIMARY KEY AUTOINCREMENT,
 		description VARCHAR(255) NOT NULL,
 		due date NOT NULL,
 		tags VARCHAR(255)
 	);`
-	_, err := DB.Exec(create_reminders_table)
+	_, err := DB.Exec(createRemindersTableSQL)
 	if err != nil {
 		panic(err)
 	}
@@ -41,7 +41,7 @@ func Init(){
 	if err != nil { 
 		panic(err)
 	}
-	// defer DB.Close()
+	defer DB.Close()
 
 	createDB(DB_PATH)
 	createTables()
