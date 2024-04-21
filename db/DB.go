@@ -22,10 +22,10 @@ func createTables(){
 	}
 }
 
-func createDB(DB_PATH string){
-	_, err := os.Stat(DB_PATH)
+func createDB(dbPath string){
+	_, err := os.Stat(dbPath)
 	if os.IsNotExist(err){
-		file, err := os.Create(DB_PATH)
+		file, err := os.Create(dbPath)
 		if err != nil {
 			panic("Could not create database")
 		}
@@ -34,16 +34,16 @@ func createDB(DB_PATH string){
 }
 
 func Init(){
-	DB_PATH := "./data/db.db"
+	dbPath := "./data/db.db"
 
 	var err error
-	DB, err = sql.Open("sqlite3", DB_PATH)
+	DB, err = sql.Open("sqlite3", dbPath)
 	if err != nil { 
 		panic(err)
 	}
 	defer DB.Close()
 
-	createDB(DB_PATH)
+	createDB(dbPath)
 	createTables()
 	
 }
